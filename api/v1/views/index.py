@@ -1,34 +1,34 @@
 #!/usr/bin/python3
 '''
-    general routes of flask
-    routes:
-        /status:    displays "status":"OK"
-        /stats:     dispalys total for all classes
+Creates route `/status` on the object app_views.
 '''
-from api.v1.views import app_views
+
+
 from flask import jsonify
+from api.v1.views import app_views
 from models import storage
 
 
-@app_views.route("/status")
-def status():
+@app_views.route('/status', methods=['GET'])
+def api_status():
     '''
-        returns JSON of OK status
+    returns a JSON response for RESTful API health
     '''
-    return jsonify({'status': 'OK'})
+    response = {'status': 'OK'}
+    return jsonify(response)
 
 
-@app_views.route("/stats")
-def storage_counts():
+@app_views.route('/stats', methods=['GET'])
+def get_stats():
     '''
-        returns counts of all classes in storage
+    retrieve number of each objts by type.
     '''
-    cls_counts = {
-        "amenities": storage.count("Amenity"),
-        "cities": storage.count("City"),
-        "places": storage.count("Place"),
-        "reviews": storage.count("Review"),
-        "states": storage.count("State"),
-        "users": storage.count("User")
+    stats = {
+        'amenities': storage.count('Amenity'),
+        'cities': storage.count('City'),
+        'places': storage.count('Place'),
+        'reviews': storage.count('Review'),
+        'states': storage.count('State'),
+        'users': storage.count('User')
     }
-    return jsonify(cls_counts)
+    return jsonify(stats)
